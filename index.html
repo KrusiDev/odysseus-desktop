@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odysseus</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #282c34;
+    color: #abb2bf;
+    font-family: "Fira Code", monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .setup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 360px;
+  }
+  h1 {
+    color: #e06c75;
+    font-size: 1.8rem;
+    margin-top: 4px;
+  }
+  p {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  input {
+    width: 100%;
+    text-align: center;
+    caret-color: transparent;
+    padding: 12px 16px;
+    background: #1e2227;
+    border: 1px solid #3e4451;
+    border-radius: 8px;
+    color: #abb2bf;
+    font-size: 0.95rem;
+    outline: none;
+    font-family: "Fira Code", monospace;
+  }
+  input:focus { border-color: #e06c75; }
+  button {
+    width: 50%;
+    padding: 13px;
+    margin-top: 4px;
+    background: #e06c75;
+    border: none;
+    border-radius: 8px;
+    color: #282c34;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    font-family: "Fira Code", monospace;
+  }
+  input::placeholder {
+  font-family: "Fira Code", monospace;
+  opacity: 0.4;
+  font-style: italic;
+}
+  button:hover { opacity: 0.9; }
+</style>
+  </head>
+  <script type="module" src="/src/main.ts"></script>
+  <body>
+    <div class="setup">
+      <svg viewBox="0 0 32 32" width="64" height="64">
+        <path d="M16 4L16 22L6 22Z" fill="#e06c75"/>
+        <path d="M16 8L16 22L24 22Z" fill="#e06c75" opacity="0.6"/>
+        <path d="M4 24Q10 20 16 24Q22 28 28 24" stroke="#e06c75" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <h1>Odysseus</h1>
+      <p>Enter the address of your Odysseus instance to set sail.</p>
+      <input id="url-input" type="text" placeholder="http://localhost:7000" />
+      <button id="connect-btn">Set sail</button>
+    </div>
+  </body>
+</html>
