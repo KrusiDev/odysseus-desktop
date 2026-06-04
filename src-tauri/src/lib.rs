@@ -246,12 +246,19 @@ pub fn run() {
                     Shortcut::new(Some(Modifiers::CONTROL), Code::Equal),
                     Shortcut::new(Some(Modifiers::CONTROL), Code::Minus),
                     Shortcut::new(Some(Modifiers::CONTROL), Code::Digit0),
+                    Shortcut::new(None, Code::F11),
                 ],
                 move |_app, shortcut, _event| {
                     match shortcut.key {
                         Code::Equal  => { let _ = adjust_zoom(&app_handle, 0.1); }
                         Code::Minus  => { let _ = adjust_zoom(&app_handle, -0.1); }
                         Code::Digit0 => { let _ = zoom_reset(app_handle.clone()); }
+                        Code::F11    => {
+                            if let Some(win) = app_handle.get_webview_window("main") {
+                                let is_fullscreen = win.is_fullscreen().unwrap_or(false);
+                                let _ = win.set_fullscreen(!is_fullscreen);
+                            }
+                        }
                         _ => {}
                     }
                 },
