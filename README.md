@@ -18,7 +18,7 @@ Go to the [Releases](https://github.com/KrusiDev/odysseus-desktop/releases) page
 | macOS | `Odysseus_x.x.x_x64.dmg` |
 | Linux | `Odysseus_x.x.x_amd64.AppImage` or `.deb` or `.rpm` |
 
-> **Note:** Windows and macOS may show a security warning since the app is not code signed. On Windows click "More info" → "Run anyway". On macOS right-click the app → Open.
+> **Note:** Windows and macOS may show a security warning since the app is not code signed. On Windows click "More info" → "Run anyway". On macOS right-click the app → Open. Also worth noting is that Linux and macOS stability has not been tested yet.
 
 ---
 
