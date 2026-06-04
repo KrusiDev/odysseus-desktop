@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.5.2] - 2026-06-04
+
+### Added
+- Frosted glass card on splash screen with iris reveal animation
+- Staggered fade-in for logo, title, tagline and button on splash screen
+- Card collapses into divider on transition to setup form (CRT-style)
+- F11 fullscreen toggle via global shortcut
+- Beginner-friendly tooltip rewrites for Protocol, Address and Port fields
+- Star count increased to 180 for denser constellation background
+
+### Changed
+- Zoom debounce improved to prevent key-repeat issues
+- Static text elements (title, tagline) no longer show text cursor on hover
+- Tooltip language simplified — technical terms replaced with plain language
+
+### Fixed
+- **Critical:** Tray icon loaded via relative path causing immediate crash in production builds
+- package.json version updated to match app version
+
 ## [0.5.0] - 2026-06-04
 
 ### Added
