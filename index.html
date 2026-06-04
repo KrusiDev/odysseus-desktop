@@ -25,6 +25,7 @@
     height: 100%;
     pointer-events: none;
     z-index: 0;
+    will-change: transform;
   }
   .splash, .container {
     position: relative;
@@ -32,6 +33,28 @@
   }
 
   /* ── Splash ── */
+  @keyframes elementReveal {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .splash-element:not(.revealed) {
+    opacity: 0 !important;
+  }
+  .splash-element.revealed {
+    animation: elementReveal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  @keyframes irisReveal {
+    from {
+      clip-path: circle(0% at 50% 50%);
+      filter: blur(24px);
+      opacity: 0;
+    }
+    to {
+      clip-path: circle(150% at 50% 50%);
+      filter: blur(0px);
+      opacity: 1;
+    }
+  }
   .splash {
     position: absolute;
     display: flex;
@@ -39,15 +62,27 @@
     align-items: center;
     gap: 14px;
     text-align: center;
+    padding: 48px 64px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(53, 90, 102, 0.35), rgba(40, 44, 52, 0.65));
+    border: 1px solid rgba(156, 222, 242, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(156, 222, 242, 0.15);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    animation: irisReveal 2s cubic-bezier(0, 0.6, 0.4, 1) forwards;
   }
   .splash h1 {
     color: #e06c75;
     font-size: 2.4rem;
     margin-top: -26px;
+    user-select: none;
+    cursor: default;
   }
   .splash .tagline {
     font-size: 1.1rem;
     opacity: 0.5;
+    user-select: none;
+    cursor: default;
   }
   .splash-btn {
     margin-top: 8px;
@@ -66,9 +101,6 @@
   .splash-btn:hover {
     opacity: 0.9;
   }
-  .splash.fade-out {
-    animation: fadeOut 0.5s ease forwards;
-  }
 
   /* ── Main ── */
   .container {
@@ -83,7 +115,8 @@
     pointer-events: auto;
   }
   .container.reveal .divider {
-    animation: growDivider 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0s both;
+    opacity: 1;
+    transform: scaleY(1);
   }
   .branding-text.revealed {
     animation: growReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -145,11 +178,15 @@
     color: #e06c75;
     font-size: 2.8rem;
     margin-top: -20px;
+    user-select: none;
+    cursor: default;
   }
   .branding p {
     font-size: 1rem;
     opacity: 0.55;
     line-height: 1.7;
+    user-select: none;
+    cursor: default;
   }
   .field {
     display: flex;
@@ -355,14 +392,14 @@
     </div>
 
     <div class="splash" id="splash">
-      <svg viewBox="0 0 32 32" width="140" height="140">
+      <svg class="splash-element" id="splash-logo" viewBox="0 0 32 32" width="140" height="140">
         <path d="M16 4L16 22L6 22Z" fill="#e06c75"/>
         <path d="M16 8L16 22L24 22Z" fill="#e06c75" opacity="0.6"/>
         <path d="M4 24Q10 20 16 24Q22 28 28 24" stroke="#e06c75" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       </svg>
-      <h1>Odysseus</h1>
-      <span class="tagline">Yours for the voyage.</span>
-      <button class="splash-btn" id="splash-btn">Ready to set sail?</button>
+      <h1 class="splash-element" id="splash-title">Odysseus</h1>
+      <span class="tagline splash-element" id="splash-tagline">Yours for the voyage.</span>
+      <button class="splash-btn splash-element" id="splash-btn">Ready to set sail?</button>
     </div>
 
     <p class="disclaimer">This application is not affiliated with, endorsed by, or associated with Odysseus created by Felix Kjellberg (PewDiePie), however this application is heavily inspired by Odysseus and meant to work in tandem with it.</p>
@@ -392,9 +429,9 @@
               <span class="tooltip-wrap">
                 <span class="tooltip-icon">?</span>
                 <div class="tooltip-box">
-                  <strong>Which protocol should I use?</strong><br><br>
-                  <span class="tt-os">http</span> Standard unencrypted connection. Use this if you are unsure — it works for most local and home server setups.<br><br>
-                  <span class="tt-os">https</span> Encrypted connection. Use this if your Odysseus instance is behind a reverse proxy with SSL (e.g. Nginx with a certificate).
+                  <strong>Which one should I pick?</strong><br><br>
+                  <span class="tt-os">http</span> The safe default. Use this if you're not sure. Works for most home setups.<br><br>
+                  <span class="tt-os">https</span> Use this if someone set up your Odysseus with a custom web address (like <code>odysseus.myhome.com</code>). If you're not sure, start with http.
                 </div>
               </span>
             </div>
@@ -421,9 +458,9 @@
               <span class="tooltip-wrap">
                 <span class="tooltip-icon">?</span>
                 <div class="tooltip-box">
-                  <strong>Do I need a port?</strong><br><br>
-                  <span class="tt-os">With a port</span> If you are connecting directly to Odysseus (e.g. on your local machine or home network), the default port is <code>7000</code>.<br><br>
-                  <span class="tt-os">Without a port</span> If Odysseus is behind a reverse proxy like Nginx, leave this blank — the proxy handles routing on port 80 or 443.
+                  <strong>Do I need a port number?</strong><br><br>
+                  <span class="tt-os">Yes, enter a port</span> If you're connecting to Odysseus running on your own computer or home network, the default is <code>7000</code>. Type that in if you're unsure.<br><br>
+                  <span class="tt-os">Leave it blank</span> If someone gave you a web address like <code>odysseus.myhome.com</code> with no numbers in it, leave this empty.
                 </div>
               </span>
             </div>
@@ -441,7 +478,7 @@
       // Constellations background
       const canvas = document.getElementById('stars');
       const ctx = canvas.getContext('2d');
-      const STAR_COUNT = 80;
+      const STAR_COUNT = 180;
       const CONNECTION_DIST = 140;
       let stars = [];
 
@@ -496,6 +533,15 @@
       resize();
       init();
       draw();
+
+      // Staggered element reveal after iris animation completes
+      const splashElements = ['splash-logo', 'splash-title', 'splash-tagline', 'splash-btn'];
+      splashElements.forEach((id, i) => {
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('revealed');
+        }, 2000 + i * 150);
+      });
 
       // Show error banner and skip splash if returning due to a connection error
       const errorType = new URLSearchParams(window.location.search).get('error');
@@ -563,7 +609,7 @@
                         :            osInstructions.unknown;
 
       document.getElementById('ip-tooltip').innerHTML =
-        `<strong>Finding your IP address</strong><br><br>${instruction}<br><br>If Odysseus is on this machine, use <code>localhost</code>.`;
+        `<strong>What address do I enter?</strong><br><br>The address is where Odysseus is running. If it's on the same computer you're using right now, type <code>localhost</code>. If it's on another device, you'll need that device's IP address.<br><br>${instruction}`;
 
       // Splash transition + choreographed reveal
       document.getElementById('splash-btn').addEventListener('click', () => {
@@ -573,14 +619,37 @@
         const btn = document.querySelector('.connect-btn-wrap');
         const brandingText = document.querySelector('.branding-text');
         const formFields = document.querySelector('.form-fields');
+        const easing = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
-        splash.classList.add('fade-out');
+        // Measure divider before reveal so dimensions are available
+        container.style.opacity = '0';
+        container.style.pointerEvents = 'none';
+        container.classList.add('reveal');
+
+        const divider = document.querySelector('.divider');
+        const dividerRect = divider.getBoundingClientRect();
+        const splashRect = splash.getBoundingClientRect();
+
+        // Hide container again until collapse finishes
+        container.classList.remove('reveal');
+        container.style.opacity = '';
+        container.style.pointerEvents = '';
+
+        const targetScaleX = dividerRect.width / splashRect.width;
+        const targetScaleY = dividerRect.height / splashRect.height;
+
+        // Phase 1: card collapses inward to match the divider exactly
+        splash.animate([
+          { transform: 'scale(1)', opacity: 1, borderRadius: '20px' },
+          { transform: `scaleX(${targetScaleX}) scaleY(${targetScaleY})`, opacity: 1, borderRadius: '1px' },
+        ], { duration: 270, easing: 'cubic-bezier(0.9, 0, 1, 1)', fill: 'forwards' });
 
         setTimeout(() => {
           splash.style.display = 'none';
           container.classList.add('reveal');
 
-          // Measure how far the logo and button are from the divider center vertically
+          // Phase 2: divider grows from where the card collapsed (already handled by CSS)
+          // Measure offsets for logo/button
           const divider = document.querySelector('.divider');
           const dividerCenter = divider.getBoundingClientRect().top + divider.getBoundingClientRect().height / 2;
 
@@ -592,20 +661,18 @@
           const btnCenter = btnRect.top + btnRect.height / 2;
           const btnOffsetY = dividerCenter - btnCenter;
 
-          const easing = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-
-          // Phase 2: slide horizontally while holding vertical center (after divider finishes)
+          // Phase 3: logo and button slide out horizontally immediately
           logo.animate([
             { opacity: 0, transform: `translate(80px, ${logoOffsetY}px)` },
             { opacity: 1, transform: `translate(0, ${logoOffsetY}px)` }
-          ], { duration: 1200, delay: 1500, easing, fill: 'forwards' });
+          ], { duration: 1200, delay: 500, easing, fill: 'forwards' });
 
           btn.animate([
             { opacity: 0, transform: `translate(-80px, ${btnOffsetY}px)` },
             { opacity: 1, transform: `translate(0, ${btnOffsetY}px)` }
-          ], { duration: 1200, delay: 1500, easing, fill: 'forwards' });
+          ], { duration: 1200, delay: 500, easing, fill: 'forwards' });
 
-          // Phase 3: settle vertically + reveal content (after phase 2 finishes)
+          // Phase 4: settle vertically + reveal content
           setTimeout(() => {
             logo.animate([
               { transform: `translate(0, ${logoOffsetY}px)` },
@@ -617,14 +684,13 @@
               { transform: 'translate(0, 0)' }
             ], { duration: 900, easing, fill: 'forwards' });
 
-            // Content reveals slightly after vertical movement starts, faster duration
             setTimeout(() => {
               brandingText.classList.add('revealed');
               formFields.classList.add('revealed');
             }, 200);
-          }, 2800);
+          }, 1800);
 
-        }, 500);
+        }, 270);
       });
     </script>
   </body>
