@@ -23,7 +23,7 @@ fn save_and_navigate(window: tauri::WebviewWindow, app: tauri::AppHandle, url: S
 }
 
 #[tauri::command]
-fn reconnect(window: tauri::WebviewWindow, app: tauri::AppHandle, url: String) -> Result<(), String> {
+fn reconnect(_window: tauri::WebviewWindow, app: tauri::AppHandle, url: String) -> Result<(), String> {
     let probe_url = url.clone();
     let probe_app = app.clone();
     std::thread::spawn(move || {
@@ -213,7 +213,7 @@ pub fn run() {
                 &quit_item,
             ])?;
 
-            let icon = Image::from_path("icons/32x32.png")?;
+            let icon = Image::from_bytes(include_bytes!("../icons/32x32.png"))?;
 
             TrayIconBuilder::new()
                 .icon(icon)
