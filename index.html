@@ -8,80 +8,624 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: #282c34;
-    color: #abb2bf;
+    color: #9cdef2;
     font-family: "Fira Code", monospace;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    overflow: hidden;
   }
-  .setup {
+
+  /* ── Canvas ── */
+  #stars {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .splash, .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Splash ── */
+  .splash {
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
-    width: 360px;
+    gap: 14px;
+    text-align: center;
   }
-  h1 {
+  .splash h1 {
     color: #e06c75;
-    font-size: 1.8rem;
-    margin-top: 4px;
+    font-size: 2.4rem;
+    margin-top: -26px;
   }
-  p {
-    font-size: 0.85rem;
-    opacity: 0.6;
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: 4px;
+  .splash .tagline {
+    font-size: 1.1rem;
+    opacity: 0.5;
   }
-  input {
-    width: 100%;
-    text-align: center;
-    caret-color: transparent;
-    padding: 12px 16px;
-    background: #1e2227;
-    border: 1px solid #3e4451;
+  .splash-btn {
+    margin-top: 8px;
+    padding: 12px 24px;
+    background: #e06c75;
+    border: none;
     border-radius: 8px;
-    color: #abb2bf;
+    color: #ffffff;
     font-size: 0.95rem;
-    outline: none;
+    font-weight: 700;
     font-family: "Fira Code", monospace;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: opacity 0.15s;
   }
-  input:focus { border-color: #e06c75; }
-  button {
-    width: 50%;
-    padding: 13px;
+  .splash-btn:hover {
+    opacity: 0.9;
+  }
+  .splash.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+  }
+
+  /* ── Main ── */
+  .container {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    width: 640px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .container.reveal {
+    pointer-events: auto;
+  }
+  .container.reveal .divider {
+    animation: growDivider 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0s both;
+  }
+  .branding-text.revealed {
+    animation: growReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+    transform-origin: top center;
+  }
+  .form-fields.revealed {
+    animation: growReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+    transform-origin: bottom center;
+  }
+  .container.reveal {
+    animation: fadeIn 0.1s ease forwards;
+    opacity: 1 !important;
+  }
+
+  .branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    flex: 1;
+  }
+  .branding-logo {
+    opacity: 0;
+  }
+  .branding-text {
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .divider {
+    width: 1px;
+    height: 280px;
+    background: #355a66;
+    flex-shrink: 0;
+    opacity: 0;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+  .connect-btn-wrap {
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .form-fields {
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .branding h1 {
+    color: #e06c75;
+    font-size: 2.8rem;
+    margin-top: -20px;
+  }
+  .branding p {
+    font-size: 1rem;
+    opacity: 0.55;
+    line-height: 1.7;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .field-label-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .field label {
+    font-size: 0.72rem;
+    opacity: 0.5;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .field .sublabel {
+    font-size: 0.68rem;
+    opacity: 0.35;
+  }
+  select, input {
+    width: 100%;
+    background: #111111;
+    border: 1px solid #355a66;
+    border-radius: 8px;
+    color: #9cdef2;
+    font-size: 0.95rem;
+    font-family: "Fira Code", monospace;
+    outline: none;
+    padding: 11px 12px;
+  }
+  select:focus, input:focus { border-color: #e06c75; }
+  select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23abb2bf'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  input::placeholder {
+    opacity: 0.3;
+    font-style: italic;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  button#connect-btn {
+    width: auto;
+    padding: 12px 20px;
     margin-top: 4px;
     background: #e06c75;
     border: none;
     border-radius: 8px;
-    color: #282c34;
+    color: #ffffff;
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
     letter-spacing: 0.04em;
     font-family: "Fira Code", monospace;
+    transition: opacity 0.15s;
   }
-  input::placeholder {
-  font-family: "Fira Code", monospace;
-  opacity: 0.4;
-  font-style: italic;
-}
-  button:hover { opacity: 0.9; }
+  button#connect-btn:hover:not(:disabled) { opacity: 0.9; }
+  button#connect-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .tooltip-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid #355a66;
+    font-size: 0.6rem;
+    opacity: 0.5;
+    cursor: default;
+    user-select: none;
+  }
+  .tooltip-wrap:hover .tooltip-icon { opacity: 1; border-color: #9cdef2; }
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    width: 260px;
+    background: #111111;
+    border: 1px solid #355a66;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: #9cdef2;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .tooltip-box code {
+    color: #e06c75;
+  }
+  .tt-os {
+    color: #e06c75;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+
+  .error-banner {
+    display: none;
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #c0392b;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-family: "Fira Code", monospace;
+    padding: 10px 20px;
+    border-radius: 8px;
+    z-index: 100;
+    animation: fadeIn 0.3s ease both;
+  }
+  .reconnect-screen {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    animation: fadeIn 0.4s ease both;
+    z-index: 1;
+  }
+  .reconnect-address {
+    font-size: 0.85rem;
+    opacity: 0.45;
+  }
+  .reconnect-hint {
+    font-size: 0.72rem;
+    opacity: 0.35;
+  }
+  .reconnect-hint span {
+    color: #e06c75;
+    cursor: pointer;
+    opacity: 1;
+  }
+  .reconnect-hint span:hover { opacity: 0.7; }
+  .disclaimer {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.62rem;
+    opacity: 0.25;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* ── Keyframes ── */
+  @keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to   { opacity: 0; transform: scale(0.97); pointer-events: none; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes growDivider {
+    from { opacity: 0; transform: scaleY(0); }
+    to   { opacity: 1; transform: scaleY(1); }
+  }
+  @keyframes growReveal {
+    from { opacity: 0; transform: scaleY(0); }
+    to   { opacity: 1; transform: scaleY(1); }
+  }
 </style>
   </head>
   <script type="module" src="/src/main.ts"></script>
   <body>
-    <div class="setup">
-      <svg viewBox="0 0 32 32" width="64" height="64">
+
+    <canvas id="stars"></canvas>
+
+    <div class="error-banner" id="error-banner"></div>
+
+    <div class="reconnect-screen" id="reconnect-screen" style="display:none;">
+      <svg viewBox="0 0 32 32" width="80" height="80">
+        <path d="M16 4L16 22L6 22Z" fill="#e06c75"/>
+        <path d="M16 8L16 22L24 22Z" fill="#e06c75" opacity="0.6"/>
+        <path d="M4 24Q10 20 16 24Q22 28 28 24" stroke="#e06c75" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <h1 style="color:#e06c75; font-size:2rem;">Odysseus</h1>
+      <span style="font-size:0.85rem; opacity:0.5;">Yours for the voyage.</span>
+      <p class="reconnect-address" id="reconnect-address"></p>
+      <button class="splash-btn" id="reconnect-btn">Attempt to reconnect</button>
+      <p class="reconnect-hint">or <span id="change-address-link">change address</span></p>
+    </div>
+
+    <div class="splash" id="splash">
+      <svg viewBox="0 0 32 32" width="140" height="140">
         <path d="M16 4L16 22L6 22Z" fill="#e06c75"/>
         <path d="M16 8L16 22L24 22Z" fill="#e06c75" opacity="0.6"/>
         <path d="M4 24Q10 20 16 24Q22 28 28 24" stroke="#e06c75" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       </svg>
       <h1>Odysseus</h1>
-      <p>Enter the address of your Odysseus instance to set sail.</p>
-      <input id="url-input" type="text" placeholder="http://localhost:7000" />
-      <button id="connect-btn">Set sail</button>
+      <span class="tagline">Yours for the voyage.</span>
+      <button class="splash-btn" id="splash-btn">Ready to set sail?</button>
     </div>
+
+    <p class="disclaimer">This application is not affiliated with, endorsed by, or associated with Odysseus created by Felix Kjellberg (PewDiePie), however this application is heavily inspired by Odysseus and meant to work in tandem with it.</p>
+
+    <div class="container" id="container">
+      <div class="branding">
+        <div class="branding-logo">
+          <svg viewBox="0 0 32 32" width="80" height="80">
+            <path d="M16 4L16 22L6 22Z" fill="#e06c75"/>
+            <path d="M16 8L16 22L24 22Z" fill="#e06c75" opacity="0.6"/>
+            <path d="M4 24Q10 20 16 24Q22 28 28 24" stroke="#e06c75" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="branding-text">
+          <h1>Odysseus</h1>
+          <p>Yours for the voyage.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form">
+        <div class="form-fields">
+          <div class="field">
+            <div class="field-label-row">
+              <label>Protocol</label>
+              <span class="tooltip-wrap">
+                <span class="tooltip-icon">?</span>
+                <div class="tooltip-box">
+                  <strong>Which protocol should I use?</strong><br><br>
+                  <span class="tt-os">http</span> Standard unencrypted connection. Use this if you are unsure — it works for most local and home server setups.<br><br>
+                  <span class="tt-os">https</span> Encrypted connection. Use this if your Odysseus instance is behind a reverse proxy with SSL (e.g. Nginx with a certificate).
+                </div>
+              </span>
+            </div>
+            <select id="protocol-select">
+              <option value="http">http</option>
+              <option value="https">https</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label>Address</label>
+              <span class="tooltip-wrap">
+                <span class="tooltip-icon">?</span>
+                <div class="tooltip-box" id="ip-tooltip"></div>
+              </span>
+            </div>
+            <input id="host-input" type="text" placeholder="e.g. localhost or 192.168.1.10" autocomplete="off" spellcheck="false" />
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label>Port</label>
+              <span class="tooltip-wrap">
+                <span class="tooltip-icon">?</span>
+                <div class="tooltip-box">
+                  <strong>Do I need a port?</strong><br><br>
+                  <span class="tt-os">With a port</span> If you are connecting directly to Odysseus (e.g. on your local machine or home network), the default port is <code>7000</code>.<br><br>
+                  <span class="tt-os">Without a port</span> If Odysseus is behind a reverse proxy like Nginx, leave this blank — the proxy handles routing on port 80 or 443.
+                </div>
+              </span>
+            </div>
+            <input id="port-input" type="number" min="1" max="65535" placeholder="e.g. 7000" />
+          </div>
+        </div>
+
+        <div class="connect-btn-wrap">
+          <button id="connect-btn" disabled>Set sail</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Constellations background
+      const canvas = document.getElementById('stars');
+      const ctx = canvas.getContext('2d');
+      const STAR_COUNT = 80;
+      const CONNECTION_DIST = 140;
+      let stars = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function init() {
+        stars = Array.from({ length: STAR_COUNT }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          r: Math.random() * 1.5 + 0.5,
+        }));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < stars.length; i++) {
+          const a = stars[i];
+          a.x += a.vx;
+          a.y += a.vy;
+          if (a.x < 0 || a.x > canvas.width) a.vx *= -1;
+          if (a.y < 0 || a.y > canvas.height) a.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(156, 222, 242, 0.6)';
+          ctx.fill();
+
+          for (let j = i + 1; j < stars.length; j++) {
+            const b = stars[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONNECTION_DIST) {
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = `rgba(156, 222, 242, ${0.15 * (1 - dist / CONNECTION_DIST)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { resize(); init(); });
+      resize();
+      init();
+      draw();
+
+      // Show error banner and skip splash if returning due to a connection error
+      const errorType = new URLSearchParams(window.location.search).get('error');
+      if (errorType) {
+        const banner = document.getElementById('error-banner');
+        banner.textContent = errorType === 'disconnected'
+          ? 'Lost connection to your Odysseus instance. Please check your connection or server and try again.'
+          : 'Could not reach that address. Please check your input and try again.';
+        banner.style.display = 'block';
+        setTimeout(() => { banner.style.display = 'none'; }, 5000);
+
+        const splash = document.getElementById('splash');
+        splash.style.display = 'none';
+
+        if (errorType === 'disconnected') {
+          // Show reconnect screen
+          const reconnectScreen = document.getElementById('reconnect-screen');
+          reconnectScreen.style.display = 'flex';
+
+          window.__TAURI_INTERNALS__.invoke('get_saved_url').then((url) => {
+            if (url) document.getElementById('reconnect-address').textContent = url;
+
+            document.getElementById('reconnect-btn').addEventListener('click', async () => {
+              if (url) await window.__TAURI_INTERNALS__.invoke('reconnect', { url });
+            });
+
+            document.getElementById('change-address-link').addEventListener('click', async () => {
+              await window.__TAURI_INTERNALS__.invoke('reset_url');
+              reconnectScreen.style.display = 'none';
+              showFormImmediately();
+            });
+          });
+        } else {
+          showFormImmediately();
+        }
+
+        function showFormImmediately() {
+          const container = document.getElementById('container');
+          container.classList.add('reveal');
+          document.querySelector('.branding-logo').style.opacity = '1';
+          document.querySelector('.branding-text').style.opacity = '1';
+          document.querySelector('.connect-btn-wrap').style.opacity = '1';
+          document.querySelector('.form-fields').style.opacity = '1';
+          document.querySelector('.divider').style.opacity = '1';
+          document.querySelector('.divider').style.transform = 'scaleY(1)';
+        }
+      }
+
+      // OS-aware tooltip
+      const ua = navigator.userAgent.toLowerCase();
+      const isWindows = ua.includes('windows');
+      const isMac = ua.includes('mac os');
+      const isLinux = ua.includes('linux');
+
+      const osInstructions = {
+        windows: `<span class="tt-os">Windows detected</span> Open Command Prompt and type <code>ipconfig</code> — look for IPv4 Address.`,
+        mac: `<span class="tt-os">macOS detected</span> Open Terminal and type <code>ifconfig | grep inet</code>.`,
+        linux: `<span class="tt-os">Linux detected</span> Open Terminal and type <code>ip a</code> or <code>hostname -I</code>.`,
+        unknown: `<span class="tt-os">Windows</span> Open Command Prompt and type <code>ipconfig</code>.<br><br><span class="tt-os">macOS</span> Open Terminal and type <code>ifconfig | grep inet</code>.<br><br><span class="tt-os">Linux</span> Open Terminal and type <code>ip a</code> or <code>hostname -I</code>.`
+      };
+
+      const instruction = isWindows ? osInstructions.windows
+                        : isMac    ? osInstructions.mac
+                        : isLinux  ? osInstructions.linux
+                        :            osInstructions.unknown;
+
+      document.getElementById('ip-tooltip').innerHTML =
+        `<strong>Finding your IP address</strong><br><br>${instruction}<br><br>If Odysseus is on this machine, use <code>localhost</code>.`;
+
+      // Splash transition + choreographed reveal
+      document.getElementById('splash-btn').addEventListener('click', () => {
+        const splash = document.getElementById('splash');
+        const container = document.getElementById('container');
+        const logo = document.querySelector('.branding-logo');
+        const btn = document.querySelector('.connect-btn-wrap');
+        const brandingText = document.querySelector('.branding-text');
+        const formFields = document.querySelector('.form-fields');
+
+        splash.classList.add('fade-out');
+
+        setTimeout(() => {
+          splash.style.display = 'none';
+          container.classList.add('reveal');
+
+          // Measure how far the logo and button are from the divider center vertically
+          const divider = document.querySelector('.divider');
+          const dividerCenter = divider.getBoundingClientRect().top + divider.getBoundingClientRect().height / 2;
+
+          const logoRect = logo.getBoundingClientRect();
+          const logoCenter = logoRect.top + logoRect.height / 2;
+          const logoOffsetY = dividerCenter - logoCenter;
+
+          const btnRect = btn.getBoundingClientRect();
+          const btnCenter = btnRect.top + btnRect.height / 2;
+          const btnOffsetY = dividerCenter - btnCenter;
+
+          const easing = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+          // Phase 2: slide horizontally while holding vertical center (after divider finishes)
+          logo.animate([
+            { opacity: 0, transform: `translate(80px, ${logoOffsetY}px)` },
+            { opacity: 1, transform: `translate(0, ${logoOffsetY}px)` }
+          ], { duration: 1200, delay: 1500, easing, fill: 'forwards' });
+
+          btn.animate([
+            { opacity: 0, transform: `translate(-80px, ${btnOffsetY}px)` },
+            { opacity: 1, transform: `translate(0, ${btnOffsetY}px)` }
+          ], { duration: 1200, delay: 1500, easing, fill: 'forwards' });
+
+          // Phase 3: settle vertically + reveal content (after phase 2 finishes)
+          setTimeout(() => {
+            logo.animate([
+              { transform: `translate(0, ${logoOffsetY}px)` },
+              { transform: 'translate(0, 0)' }
+            ], { duration: 900, easing, fill: 'forwards' });
+
+            btn.animate([
+              { transform: `translate(0, ${btnOffsetY}px)` },
+              { transform: 'translate(0, 0)' }
+            ], { duration: 900, easing, fill: 'forwards' });
+
+            // Content reveals slightly after vertical movement starts, faster duration
+            setTimeout(() => {
+              brandingText.classList.add('revealed');
+              formFields.classList.add('revealed');
+            }, 200);
+          }, 2800);
+
+        }, 500);
+      });
+    </script>
   </body>
 </html>
