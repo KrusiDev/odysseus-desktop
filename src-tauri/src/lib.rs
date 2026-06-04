@@ -254,9 +254,19 @@ pub fn run() {
                         Code::Minus  => { let _ = adjust_zoom(&app_handle, -0.1); }
                         Code::Digit0 => { let _ = zoom_reset(app_handle.clone()); }
                         Code::F11    => {
-                            if let Some(win) = app_handle.get_webview_window("main") {
-                                let is_fullscreen = win.is_fullscreen().unwrap_or(false);
-                                let _ = win.set_fullscreen(!is_fullscreen);
+                            let key_times = app_handle.state::<Arc<Mutex<HashMap<String, Instant>>>>();
+                            let mut map = key_times.lock().unwrap();
+                            let now = Instant::now();
+                            let should_fire = map.get("f11")
+                                .map(|last| last.elapsed() >= Duration::from_millis(300))
+                                .unwrap_or(true);
+                            map.insert("f11".to_string(), now);
+                            drop(map);
+                            if should_fire {
+                                if let Some(win) = app_handle.get_webview_window("main") {
+                                    let is_fullscreen = win.is_fullscreen().unwrap_or(false);
+                                    let _ = win.set_fullscreen(!is_fullscreen);
+                                }
                             }
                         }
                         _ => {}

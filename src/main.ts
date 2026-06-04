@@ -42,6 +42,7 @@ const webview = getCurrentWebview();
 let zoom = 1.0;
 
 
+
 // Zoom via Tauri's built-in setZoom API (Ctrl+/-, Ctrl+0)
 window.addEventListener("keydown", async (e) => {
   if (!e.ctrlKey) return;
