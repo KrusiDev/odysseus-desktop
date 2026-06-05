@@ -241,7 +241,7 @@ pub fn run() {
 
             // Global shortcuts
             let app_handle = app.handle().clone();
-            app.global_shortcut().on_shortcuts(
+            let _ = app.global_shortcut().on_shortcuts(
                 [
                     Shortcut::new(Some(Modifiers::CONTROL), Code::Equal),
                     Shortcut::new(Some(Modifiers::CONTROL), Code::Minus),
