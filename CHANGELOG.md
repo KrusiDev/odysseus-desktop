@@ -5,6 +5,10 @@
 ### Fixed
 - App no longer crashes on Linux when a global shortcut is already registered by the system — each shortcut is now registered individually and failures are silently skipped
 
+### Known Issues
+- Global keyboard shortcuts (Ctrl+/-, Ctrl+0, F11) may not work on Linux depending on the desktop environment — use the system tray icon instead
+- Ubuntu/Debian users must use the `.deb` installer — the `.AppImage` has rendering issues on Ubuntu
+
 ## [0.5.2] - 2026-06-04
 
 ### Added

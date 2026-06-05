@@ -16,9 +16,15 @@ Go to the [Releases](https://github.com/KrusiDev/odysseus-desktop/releases) page
 |----------|------|
 | Windows | `Odysseus_x.x.x_x64-setup.exe` or `.msi` |
 | macOS | `Odysseus_x.x.x_x64.dmg` |
-| Linux | `Odysseus_x.x.x_amd64.AppImage` or `.deb` or `.rpm` |
+| Ubuntu / Debian | `Odysseus_x.x.x_amd64.deb` |
+| Fedora / Red Hat | `Odysseus-x.x.x-1.x86_64.rpm` |
+| Other Linux | `Odysseus_x.x.x_amd64.AppImage` |
 
-> **Note:** Windows and macOS may show a security warning since the app is not code signed. On Windows click "More info" → "Run anyway". On macOS right-click the app → Open. Also worth noting is that Linux and macOS stability has not been tested yet.
+> **Note:** Windows and macOS may show a security warning since the app is not code signed. On Windows click "More info" → "Run anyway". On macOS right-click the app → Open.
+>
+> **Linux note:** Ubuntu and Debian users must use the `.deb` installer. The `.AppImage` is known to have rendering issues on Ubuntu. macOS stability has not been fully tested yet.
+>
+> **Linux keyboard shortcuts:** Global keyboard shortcuts (Ctrl+/-, F11) may not work on all Linux desktop environments. Use the system tray icon instead.
 
 ---
 
