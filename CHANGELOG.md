@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.3] - 2026-06-04
+
+### Fixed
+- App no longer crashes on Linux when a global shortcut is already registered by the system — each shortcut is now registered individually and failures are silently skipped
+
 ## [0.5.2] - 2026-06-04
 
 ### Added

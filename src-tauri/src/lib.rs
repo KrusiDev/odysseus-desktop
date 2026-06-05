@@ -239,16 +239,16 @@ pub fn run() {
                 })
                 .build(app)?;
 
-            // Global shortcuts
-            let app_handle = app.handle().clone();
-            let _ = app.global_shortcut().on_shortcuts(
-                [
-                    Shortcut::new(Some(Modifiers::CONTROL), Code::Equal),
-                    Shortcut::new(Some(Modifiers::CONTROL), Code::Minus),
-                    Shortcut::new(Some(Modifiers::CONTROL), Code::Digit0),
-                    Shortcut::new(None, Code::F11),
-                ],
-                move |_app, shortcut, _event| {
+            // Global shortcuts — registered individually so a conflict on one doesn't crash the app
+            let shortcuts = [
+                Shortcut::new(Some(Modifiers::CONTROL), Code::Equal),
+                Shortcut::new(Some(Modifiers::CONTROL), Code::Minus),
+                Shortcut::new(Some(Modifiers::CONTROL), Code::Digit0),
+                Shortcut::new(None, Code::F11),
+            ];
+            for shortcut in shortcuts {
+                let app_handle = app.handle().clone();
+                let _ = app.global_shortcut().on_shortcut(shortcut, move |_app, shortcut, _event| {
                     match shortcut.key {
                         Code::Equal  => { let _ = adjust_zoom(&app_handle, 0.1); }
                         Code::Minus  => { let _ = adjust_zoom(&app_handle, -0.1); }
@@ -271,8 +271,8 @@ pub fn run() {
                         }
                         _ => {}
                     }
-                },
-            )?;
+                });
+            }
 
             // Restore saved URL on startup
             let app_dir = app.path().app_data_dir().unwrap();
