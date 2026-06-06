@@ -65,7 +65,7 @@ Follow [the Odysseus setup guide](https://github.com/pewdiepie-archdaemon/odysse
 1. Download and run the installer for your platform
 2. Click **Ready to set sail?** on the splash screen
 3. Select your protocol (`http` for most setups, `https` if behind a reverse proxy with SSL)
-4. Enter the address of your Odysseus instance (e.g. `localhost` or `192.168.1.10`)
+4. Enter the address of your Odysseus instance (e.g. `localhost` or `ip-address`)
 5. Enter the port if connecting directly (default: `7000`). Leave blank if using a reverse proxy
 6. Click **Set sail**
 
